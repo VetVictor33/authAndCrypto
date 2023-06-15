@@ -7,7 +7,7 @@ create table users (
   password varchar(32) not null
 );
 
-create table monster (
+create table monsters (
 	id serial primary key,
   user_id int references users(id),
   name varchar(60) not null,

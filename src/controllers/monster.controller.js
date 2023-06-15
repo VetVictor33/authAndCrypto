@@ -16,7 +16,6 @@ const getMonster = async (req, res) => {
 
         return res.json({ monsters })
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: 'Internal server error' })
     }
 }
@@ -33,7 +32,6 @@ const postMonster = async (req, res) => {
 
         res.status(201).json({ monster });
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal server error" })
     }
 }
@@ -52,7 +50,6 @@ const patchMonster = async (req, res) => {
         const monster = query.rows[0];
         return res.json({ monster })
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: "Internal server error" });
     }
 }
@@ -68,7 +65,6 @@ const deleteMonster = async (req, res) => {
 
         return res.json({ message: "Monster succesfully removed" })
     } catch (error) {
-        console.log(error);
         return res.status(500).json({ message: "Internal server error" });
     }
 }

@@ -38,6 +38,12 @@ Recupera o monstro do usuário especificado pelo id da rota ou, quando esse não
 ![Alt text](readme_imgs/image-7.png)
 ![Alt text](readme_imgs/image-8.png)
 
+### PATCH /monster/id/"campo"
+
+Modifica o monstro de id selecionado de acordo com o campo escolhido, sendo válidos apenas os campos: name, skills, image, nickname.
+![Alt text](readme_imgs/image-10.png)
+![Alt text](readme_imgs/image-11.png)
+
 ### DELETE /monsters/id
 
 Apaga do banco de dados o monstro com o id especificado vinculado ao usuário.

@@ -14,9 +14,9 @@ router.post('/signin', signinValidation, postSignin);
 
 router.use(tokenValidation);
 
+router.post('/monster', monsterDataValidation, postMonster);
 router.get('/monsters', getMonster);
 router.get('/monsters/:monsterId', getMonster);
-router.post('/monster', monsterDataValidation, postMonster);
 router.patch('/monster/:monsterId/:field', monsterPatchValidation, patchMonster);
 router.delete('/monster/:monsterId', deleteMonster)
 

@@ -1,5 +1,5 @@
 const express = require('express');
-const { postUser, postSignin } = require('./controllers/users.controller');
+const { signup, signin } = require('./controllers/users.controller');
 const { signupVaidation, signinValidation } = require('./middlewares/userDataValidation');
 const { tokenValidation } = require('./middlewares/tokenValidation');
 const { getMonster, postMonster, patchMonster, deleteMonster } = require('./controllers/monster.controller');
@@ -9,8 +9,8 @@ const router = express();
 
 router.get('/', (req, res) => { res.json('Server is up and running') });
 
-router.post('/signup', signupVaidation, postUser);
-router.post('/signin', signinValidation, postSignin);
+router.post('/signup', signupVaidation, signup);
+router.post('/signin', signinValidation, signin);
 
 router.use(tokenValidation);
 

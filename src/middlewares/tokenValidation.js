@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { pool } = require('../database/conection');
+const { knex } = require('../database/conection');
 
 const tokenValidation = async (req, res, next) => {
     const { authorization } = req.headers;
@@ -9,8 +9,9 @@ const tokenValidation = async (req, res, next) => {
         const userToken = jwt.verify(token, process.env.JWT_SECRET);
         const { id } = userToken;
 
-        const response = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-        const { password: _, ...user } = response.rows[0];
+        // const response = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
+        const userFromDb = await knex("users").where({ id }).first();
+        const { password: _, ...user } = userFromDb;
         req.user = user;
         next()
 

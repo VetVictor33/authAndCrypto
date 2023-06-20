@@ -49,7 +49,7 @@ Modifica o monstro de id selecionado de acordo com o campo escolhido, sendo vál
 Apaga do banco de dados o monstro com o id especificado vinculado ao usuário.
 ![Alt text](readme_imgs/image-9.png)
 
-## Principais utilizadas
+## Principais tecnologias utilizadas
 
 node;
 
@@ -57,4 +57,6 @@ express;
 
 jwt para autenticação;
 
-bcrypt para criptografia de senha.
+bcrypt para criptografia de senha;
+
+pg e knex para interagir com o banco de dados.

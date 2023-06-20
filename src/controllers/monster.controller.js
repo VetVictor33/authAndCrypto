@@ -7,16 +7,22 @@ const getMonster = async (req, res) => {
         let monstersQuery;
         if (monsterId) {
             // query = await pool.query('SELECT * FROM monsters WHERE user_id = $1 AND id = $2', [userId, monsterId]);
-            monstersQuery = await knex("monsters").where({ user_id: userId, id: monsterId });
+            // monstersQuery = await knex("monsters").where({ user_id: userId, id: monsterId });
+            monstersQuery = await knex("monsters").where({ user_id: userId, "monsters.id": monsterId })
+                .join('users', 'users.id', '=', 'monsters.user_id').select('monsters.*', 'users.name as user_name').debug();
+
         } else {
             // query = await pool.query('SELECT * FROM monsters WHERE user_id = $1', [userId]);
-            monstersQuery = await knex("monsters").where({ user_id: userId });
+            // monstersQuery = await knex("monsters").where({ user_id: userId });
+            monstersQuery = await knex('monsters').where({ user_id: userId }).
+                join('users', 'users.id', '=', 'monsters.user_id').select('monsters.*', 'users.name as user_name');
         }
 
         if (monstersQuery.length < 1) return res.status(404).json({ message: `Looks like there is no monster${monsterId ? ` with id ${monsterId}` : ''}` })
 
         return res.json(monstersQuery)
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ message: 'Internal server error' })
     }
 }

@@ -1,15 +1,10 @@
-const bcrypt = require('bcrypt')
-const { knex } = require("../database/conection");
-const getToken = require('../utils/tokenConfig');
-
-const saltRounds = 10;
+const { registerNewUserOnDb, loginUser } = require("../services/database/users.repository");
 
 const signup = async (req, res) => {
     const { name, email, password } = req.body;
 
     try {
-        const encryptedPassword = await bcrypt.hash(password, saltRounds)
-        await knex("users").insert({ name, email, password: encryptedPassword });
+        await registerNewUserOnDb({ name, email, password });
         return res.status(201).json({
             message: 'New user registered'
         })
@@ -29,21 +24,11 @@ const signin = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const loginAttempt = await knex("users").where({ email }).first();
+        const login = await loginUser({ email, password });
+        if (!login) return res.status(400).json({ message: 'Credentials do not match' });
 
-        if (!loginAttempt) return res.status(400).json({ message: 'Credentials do not match the database' });
-
-        const { password: hashedPassword, ...user } = loginAttempt;
-
-        const isPasswordCorrect = await bcrypt.compare(password, hashedPassword)
-
-        if (!isPasswordCorrect) return res.status(400).json({ message: 'Credentials do not match the database' });
-
-        const token = getToken({ id: user.id })
-
-        return res.json({ token, user })
+        return res.json(login)
     } catch (error) {
-        console.log(error)
         return res.status(500).json({
             message: "Internal server error"
         })

@@ -4,7 +4,7 @@ create table users (
 	id serial primary key,
   name varchar(60) not null,
   email varchar(180) not null unique,
-  password varchar(32) not null
+  password text not null
 );
 
 create table monsters (
@@ -15,5 +15,3 @@ create table monsters (
   image text,
   nickname varchar(60)
 );
-
-alter table users alter column password type text

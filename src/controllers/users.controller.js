@@ -9,7 +9,6 @@ const signup = async (req, res) => {
 
     try {
         const encryptedPassword = await bcrypt.hash(password, saltRounds)
-        // await pool.query('INSERT INTO users (name, email, password) values ($1, $2, $3)', [name, email, encryptedPassword]);
         await knex("users").insert({ name, email, password: encryptedPassword });
         return res.status(201).json({
             message: 'New user registered'
@@ -30,7 +29,6 @@ const signin = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // const response = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         const loginAttempt = await knex("users").where({ email }).first();
 
         if (!loginAttempt) return res.status(400).json({ message: 'Credentials do not match the database' });

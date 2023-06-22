@@ -33,7 +33,7 @@ const signin = async (req, res) => {
         // const response = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
         const loginAttempt = await knex("users").where({ email }).first();
 
-        if (loginAttempt.length < 1) return res.status(400).json({ message: 'Credentials do not match the database' });
+        if (!loginAttempt) return res.status(400).json({ message: 'Credentials do not match the database' });
 
         const { password: hashedPassword, ...user } = loginAttempt;
 

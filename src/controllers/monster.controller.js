@@ -1,24 +1,17 @@
-const { knex } = require("../database/conection");
+const { getMonsterFromDb, insertNewMosterOnDb, updateMonsterFromDb, deleteMonsterFromDb } = require("../services/database/monster.repository");
 
 const getMonster = async (req, res) => {
     const { id: userId } = req.user;
     const { monsterId } = req.params;
     try {
-        let monstersQuery;
-        if (monsterId) {
-            monstersQuery = await knex("monsters").where({ user_id: userId, "monsters.id": monsterId })
-                .join('users', 'users.id', '=', 'monsters.user_id').select('monsters.*', 'users.name as user_name').debug();
+        const monstersQuery = await getMonsterFromDb(userId, monsterId);
 
-        } else {
-            monstersQuery = await knex('monsters').where({ user_id: userId }).
-                join('users', 'users.id', '=', 'monsters.user_id').select('monsters.*', 'users.name as user_name');
-        }
-
-        if (monstersQuery.length < 1) return res.status(404).json({ message: `Looks like there is no monster${monsterId ? ` with id ${monsterId}` : ''}` })
+        if (monstersQuery.length < 1) return res.status(404).json({
+            message: `Looks like there is no monster${monsterId ? ` with id ${monsterId}` : ''}`
+        })
 
         return res.json(monstersQuery)
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: 'Internal server error' })
     }
 }
@@ -27,7 +20,7 @@ const postMonster = async (req, res) => {
     const { id: userId } = req.user;
     const { name, skills, image, nickname } = req.body;
     try {
-        const newMoster = await knex("monsters").insert({ user_id: userId, name, skills, image, nickname }).returning("*");
+        const newMoster = await insertNewMosterOnDb(userId, { name, skills, image, nickname })
 
         res.status(201).json(newMoster);
     } catch (error) {
@@ -42,7 +35,7 @@ const patchMonster = async (req, res) => {
     const { newValue } = req.body;
 
     try {
-        const updatedMonster = await knex("monsters").update(field, newValue).where({ user_id: userId, id: monsterId }).returning("*");
+        const updatedMonster = await updateMonsterFromDb(field, newValue, userId, monsterId);
 
         if (updatedMonster.length === 0) return res.status(404).json({ message: "Monster not found" });
 
@@ -57,7 +50,7 @@ const deleteMonster = async (req, res) => {
     const { monsterId } = req.params;
 
     try {
-        const deletedMonster = await knex("monsters").del().where({ user_id: userId, id: monsterId });
+        const deletedMonster = await deleteMonsterFromDb(userId, monsterId);
         if (deletedMonster === 0) return res.status(404).json({ message: `There are no monster with id ${monsterId}` });
 
         return res.json({ message: "Monster succesfully removed" })

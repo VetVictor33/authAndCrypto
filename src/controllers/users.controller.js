@@ -1,3 +1,4 @@
+const message = require('../utils/response.messages');
 const { registerNewUserOnDb, loginUser } = require("../services/database/users.repository");
 
 const signup = async (req, res) => {
@@ -6,16 +7,16 @@ const signup = async (req, res) => {
     try {
         await registerNewUserOnDb({ name, email, password });
         return res.status(201).json({
-            message: 'New user registered'
+            message: message.successfullyAddUser
         })
     } catch (error) {
         if (error?.code == 23505) {
             return res.status(400).json({
-                message: 'It is not possible to use this email, please try another one'
+                message: message.emailNotAccepted
             })
         }
         return res.status(500).json({
-            message: 'Internal server error'
+            message: message.internalServerError
         })
     }
 }
@@ -25,12 +26,12 @@ const signin = async (req, res) => {
 
     try {
         const login = await loginUser({ email, password });
-        if (!login) return res.status(400).json({ message: 'Credentials do not match' });
+        if (!login) return res.status(400).json({ message: message.failedToLogIn });
 
         return res.json(login)
     } catch (error) {
         return res.status(500).json({
-            message: "Internal server error"
+            message: message.internalServerError
         })
     }
 }

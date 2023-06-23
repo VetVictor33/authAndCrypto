@@ -1,3 +1,4 @@
+const message = require('../utils/response.messages');
 const { getMonsterFromDb, insertNewMosterOnDb, updateMonsterFromDb, deleteMonsterFromDb } = require("../services/database/monster.repository");
 
 const getMonster = async (req, res) => {
@@ -7,12 +8,12 @@ const getMonster = async (req, res) => {
         const monstersQuery = await getMonsterFromDb(userId, monsterId);
 
         if (monstersQuery.length < 1) return res.status(404).json({
-            message: `Looks like there is no monster${monsterId ? ` with id ${monsterId}` : ''}`
+            message: message.noMosterFound
         })
 
         return res.json(monstersQuery)
     } catch (error) {
-        return res.status(500).json({ message: 'Internal server error' })
+        return res.status(500).json({ message: message.internalServerError })
     }
 }
 
@@ -24,7 +25,7 @@ const postMonster = async (req, res) => {
 
         res.status(201).json(newMoster);
     } catch (error) {
-        res.status(500).json({ message: "Internal server error" })
+        res.status(500).json({ message: message.internalServerError })
     }
 }
 
@@ -37,11 +38,13 @@ const patchMonster = async (req, res) => {
     try {
         const updatedMonster = await updateMonsterFromDb(field, newValue, userId, monsterId);
 
-        if (updatedMonster.length === 0) return res.status(404).json({ message: "Monster not found" });
+        if (updatedMonster.length === 0) return res.status(404).json({
+            message: message.monsterNotFound
+        });
 
         return res.json(updatedMonster)
     } catch (error) {
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: message.internalServerError });
     }
 }
 
@@ -51,11 +54,11 @@ const deleteMonster = async (req, res) => {
 
     try {
         const deletedMonster = await deleteMonsterFromDb(userId, monsterId);
-        if (deletedMonster === 0) return res.status(404).json({ message: `There are no monster with id ${monsterId}` });
+        if (deletedMonster === 0) return res.status(404).json({ message: message.monsterNotFound });
 
-        return res.json({ message: "Monster succesfully removed" })
+        return res.json({ message: message.succesfullyRemovedMoster })
     } catch (error) {
-        return res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: message.internalServerError });
     }
 }
 

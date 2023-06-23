@@ -2,7 +2,8 @@ const { knex } = require("./conection");
 
 async function getMonsterFromDb(userId, monsterId) {
     const queryWhere = monsterId ? { user_id: userId, "monsters.id": monsterId } : { user_id: userId };
-    const response = await knex("monsters").where(queryWhere);
+    const response = await knex("monsters").where(queryWhere)
+        .join('users', 'users.id', '=', 'monsters.user_id').select('users.name as owner', 'monsters.*');
     return response
 }
 

@@ -1,4 +1,4 @@
-import { NextFunction, ModRequest as Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import jwt, { JsonWebTokenError, ModJwtPayload } from 'jsonwebtoken';
 import db from "../services/database/conection";
 import TokenUtils from "../utils/TokenUtils";

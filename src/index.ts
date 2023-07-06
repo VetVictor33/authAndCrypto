@@ -1,11 +1,11 @@
 import "dotenv/config";
 import express from 'express';
-import router from './routes'
+import Routes from "./routes";
 
 const app = express();
 
 app.use(express.json());
-app.use(router);
+app.use(new Routes().router);
 
 const port = process.env.PORT || 3000;
 

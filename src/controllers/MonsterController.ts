@@ -1,4 +1,4 @@
-import { ModRequest as Request, Response } from "express";
+import { Request, Response } from "express";
 import { internalServerError, monsterNotFound, noMosterFound, succesfullyRemovedMoster } from '../utils/MessageUtils'
 import MonsterRepository from "../services/database/MonsterRepository";
 import { Monster } from "../interfaces/costumInterfaces";

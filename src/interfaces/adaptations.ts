@@ -1,12 +1,14 @@
-import { Request as req } from "express";
 import jwt from "jsonwebtoken"
+import { Request } from "express";
 
-declare module "express" {
-    interface ModRequest extends req {
-        user: {
-            id: number,
-            email: string
-        };
+declare global {
+    namespace Express {
+        interface Request {
+            user: {
+                id: number,
+                email: string
+            };
+        }
     }
 }
 

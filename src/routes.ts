@@ -1,13 +1,13 @@
 import express, {Router} from 'express';
 import MonsterController from './controllers/MonsterController';
 import MonsterValidation from './middlewares/MonsterValidation';
-import AccountValidation from './middlewares/AccountValidation';
 import AccountController from './controllers/AccountController';
 import TokenValidation from './middlewares/TokenValidation';
+import schemaValidation from './middlewares/schemaValidation';
+import { accountLoginSchema, accountSignupSchema, monsterCreationSchema } from './schemas/Schemas';
 export default class Routes {
   public router: Router
 
-  private accountValidation: AccountValidation = new AccountValidation()
   private monsterValidation: MonsterValidation = new MonsterValidation()
   private tokenValidation: TokenValidation = new TokenValidation()
 
@@ -22,15 +22,15 @@ export default class Routes {
   private createRoutes() {
     this.router.get('/', (req, res) => { res.json('Server is up and running') });
     
-    this.router.post('/signup', this.accountValidation.signup, this.accountController.signup);
-    this.router.post('/signin', this.accountValidation.signin, this.accountController.sigin);
+    this.router.post('/signup', schemaValidation(accountSignupSchema), this.accountController.signup);
+    this.router.post('/signin', schemaValidation(accountLoginSchema), this.accountController.sigin);
     
     this.router.use(this.tokenValidation.validate);
     
-    this.router.post('/monster', this.monsterValidation.creation, this.monsterController.post);
+    this.router.post('/monsters', schemaValidation(monsterCreationSchema), this.monsterController.post);
     this.router.get('/monsters', this.monsterController.get);
     this.router.get('/monsters/:monsterId', this.monsterController.get);
-    this.router.patch('/monster/:monsterId/:field', this.monsterValidation.update, this.monsterController.patch);
-    this.router.delete('/monster/:monsterId', this.monsterController.delete)
+    this.router.patch('/monsters/:monsterId/:field', this.monsterValidation.update, this.monsterController.patch);
+    this.router.delete('/monsters/:monsterId', this.monsterController.delete)
   }
 }

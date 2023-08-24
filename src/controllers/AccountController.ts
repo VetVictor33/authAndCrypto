@@ -11,6 +11,7 @@ export default class AccountController {
                 message: successfullyAddUser
             })
         } catch (error: any) {
+            console.log(error)
             if (error?.code == 23505) {
                 return res.status(400).json({
                     message: emailNotAccepted

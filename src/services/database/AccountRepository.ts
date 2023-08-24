@@ -1,6 +1,6 @@
 import TokenUtils from "../../utils/TokenUtils";
 import Encryptation from "../cryptography/Encryptation";
-import db from "./conection";
+import db from "./connection";
 
 export default abstract class AccountRepository {
     static async signup(name: string, email: string, password: string) {

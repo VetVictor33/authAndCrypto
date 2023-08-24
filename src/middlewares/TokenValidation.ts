@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JsonWebTokenError, ModJwtPayload } from 'jsonwebtoken';
-import db from "../services/database/conection";
+import db from "../services/database/connection";
 import TokenUtils from "../utils/TokenUtils";
 import { internalServerError } from "../utils/MessageUtils";
 

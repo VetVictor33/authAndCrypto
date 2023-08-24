@@ -1,4 +1,4 @@
-import express, {Router} from 'express';
+import { Router } from 'express';
 import MonsterController from './controllers/MonsterController';
 import MonsterValidation from './middlewares/MonsterValidation';
 import AccountController from './controllers/AccountController';
@@ -13,20 +13,20 @@ export default class Routes {
 
   private accountController: AccountController = new AccountController()
   private monsterController: MonsterController = new MonsterController()
-  
-  constructor(){
-    this.router = express()
+
+  constructor() {
+    this.router = Router()
     this.createRoutes()
   }
-  
+
   private createRoutes() {
     this.router.get('/', (req, res) => { res.json('Server is up and running') });
-    
+
     this.router.post('/signup', schemaValidation(accountSignupSchema), this.accountController.signup);
     this.router.post('/signin', schemaValidation(accountLoginSchema), this.accountController.sigin);
-    
+
     this.router.use(this.tokenValidation.validate);
-    
+
     this.router.post('/monsters', schemaValidation(monsterCreationSchema), this.monsterController.post);
     this.router.get('/monsters', this.monsterController.get);
     this.router.get('/monsters/:monsterId', this.monsterController.get);

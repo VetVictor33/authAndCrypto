@@ -59,4 +59,6 @@ jwt para autenticação;
 
 bcrypt para criptografia de senha;
 
-pg e knex para interagir com o banco de dados.
+pg e knex para interagir com o banco de dados;
+
+joi para schemas de validação de dados de requisição

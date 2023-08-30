@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { emailNotAccepted, failedToLogIn, internalServerError, successfullyAddUser } from "../utils/MessageUtils";
 import AccountRepository from "../services/database/AccountRepository";
+import BadRequestError from "../errors/BadRequestError";
 
 export default class AccountController {
     async signup(req: Request, res: Response) {
@@ -26,16 +27,9 @@ export default class AccountController {
     async sigin(req: Request, res: Response) {
         const { email, password } = req.body;
 
-        try {
-            const login = await AccountRepository.signin(email, password);
-            if (!login) return res.status(400).json({ message: failedToLogIn });
+        const login = await AccountRepository.signin(email, password);
+        if (!login) throw new BadRequestError(failedToLogIn)
 
-            return res.json(login)
-        } catch (error) {
-            console.log(error)
-            return res.status(500).json({
-                message: internalServerError
-            })
-        }
+        return res.json(login)
     }
 }

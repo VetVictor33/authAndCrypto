@@ -19,7 +19,7 @@ export default class TokenValidation {
             next()
 
         } catch (error: JsonWebTokenError | any) {
-            let message = internalServerError;
+            let message = authorization ? internalServerError : 'Invalid token';
             if (error instanceof JsonWebTokenError) {
                 message = error.message
             }

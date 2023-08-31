@@ -5,7 +5,7 @@ export default class MonsterValidation {
         const { newValue } = req.body;
         const { field } = req.params;
 
-        if (!(['name', 'skills', 'image', 'nickname'].includes(field))) {
+        if (!(['name', 'skills', 'image_url', 'nickname'].includes(field))) {
             const message = `Invalid params`
             return res.status(400).json({ message })
         }

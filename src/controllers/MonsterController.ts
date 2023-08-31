@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { NewMonster } from "../@types/monster";
 import NotFoundError from "../errors/NotFoundError";
 import MonsterRepository from "../services/database/MonsterRepository";
-import { noMonsterFound, successfullyRemovedMonster } from '../utils/MessageUtils';
+import { noMonsterFound, successfullyRemovedMonster, successfullyUpdatedMonster } from '../utils/MessageUtils';
 
 export default class MonsterController {
     async get(req: Request, res: Response) {
@@ -10,15 +10,15 @@ export default class MonsterController {
         const { monsterId } = req.params;
 
         const monstersQuery = await MonsterRepository.get(userId, +monsterId);
-        if (monstersQuery.length < 1) throw new NotFoundError(noMonsterFound)
+        if (!monstersQuery) throw new NotFoundError(noMonsterFound)
 
         return res.json(monstersQuery)
     }
 
     async post(req: Request, res: Response) {
         const { id: userId } = req.user;
-        const { name, skills, image, nickname } = req.body as NewMonster;
-        const newMonsterData: NewMonster = { name, skills, image, nickname }
+        const { name, skills, image_url, nickname } = req.body as NewMonster;
+        const newMonsterData: NewMonster = { name, skills, image_url, nickname }
 
         const newMonster = await MonsterRepository.insert(userId, newMonsterData)
 
@@ -31,19 +31,17 @@ export default class MonsterController {
         const { field } = req.params;
         const { newValue } = req.body;
 
-        const updatedMonster = await MonsterRepository.update(field, newValue, userId, +monsterId);
-        if (updatedMonster.length === 0) throw new NotFoundError(noMonsterFound)
+        const newData = await MonsterRepository.update(field, newValue, userId, +monsterId);
 
-        return res.json(updatedMonster)
+        return res.json({ message: successfullyUpdatedMonster, newData })
     }
 
     async delete(req: Request, res: Response) {
         const { id: userId } = req.user;
         const { monsterId } = req.params;
 
-        const deletedMonster = await MonsterRepository.delete(userId, +monsterId);
-        if (deletedMonster === 0) throw new NotFoundError(noMonsterFound)
+        await MonsterRepository.delete(userId, +monsterId)
 
-        return res.json({ message: successfullyRemovedMonster })
+        return res.status(204).send()
     }
 }

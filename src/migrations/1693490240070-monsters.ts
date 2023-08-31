@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, Table } from "typeorm"
+import { MigrationInterface, QueryRunner, Table, TableForeignKey } from "typeorm"
 
 export class Monsters1693490240070 implements MigrationInterface {
 
@@ -13,13 +13,33 @@ export class Monsters1693490240070 implements MigrationInterface {
                 },
                 {
                     name: 'user_id',
-                    type: ''
+                    type: 'int'
                 },
+                {
+                    name: 'name',
+                    type: 'text',
+                },
+                {
+                    name: 'nickname',
+                    type: 'text'
+                },
+                {
+                    name: 'skills',
+                    type: 'text',
+                    isNullable: true
+                },
+                {
+                    name: 'image_url',
+                    type: 'text',
+                    isNullable: true
+                }
             ]
         })
+        await queryRunner.createTable(monsters)
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
+        await queryRunner.dropTable('monsters')
     }
 
 }

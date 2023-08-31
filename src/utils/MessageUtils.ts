@@ -4,4 +4,5 @@ export const internalServerError = 'Internal server error',
     failedToLogIn = 'Credentials do not match the database',
     noMonsterFound = 'There are no monster registered',
     monsterNotFound = 'Monster not found',
-    successfullyRemovedMonster = 'Monster successfully removed'
+    successfullyRemovedMonster = 'Monster successfully removed',
+    successfullyUpdatedMonster = 'Monster successfully updated'

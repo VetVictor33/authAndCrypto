@@ -3,8 +3,8 @@ export type Monster = {
   user_id: number,
   name: string,
   skills: string,
-  image: string | undefined | null,
-  nickname: string | undefined | null
+  image_url: string | undefined,
+  nickname: string | undefined
 }
 
 export type NewMonster = Omit<Monster, 'id' | 'user_id'>

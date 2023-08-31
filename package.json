@@ -7,7 +7,10 @@
     "dev": "nodemon --exec ts-node ./src/index.ts",
     "migration:create": "typeorm migration:create ./src/migrations/%npm_config_migration%",
     "migration:run": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:run",
-    "migration:revert": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:revert"
+    "migration:revert": "typeorm-ts-node-commonjs -d ./src/data-source.ts migration:revert",
+    "migration:refresh": "npm run migration:revert && npm run migration:run ",
+    "build": "rm -rf ./dist && tsc",
+    "start": "node ./dist/index.js"
   },
   "keywords": [],
   "author": "",

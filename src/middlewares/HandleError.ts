@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import ExpressError from "../errors/ExpressError";
 import { emailNotAccepted, internalServerError } from "../utils/MessageUtils";
+import { JsonWebTokenError } from "jsonwebtoken";
 
 export default async function HandleError(err: Error & Partial<ExpressError> & Partial<any>, req: Request, res: Response, next: NextFunction) {
   let status = err.status ?? 500
@@ -10,6 +11,9 @@ export default async function HandleError(err: Error & Partial<ExpressError> & P
     message = emailNotAccepted
   } else if (err.name === 'ValidationError') {
     status = 400
+    message = err.message
+  } else if (err instanceof JsonWebTokenError) {
+    status = 401
     message = err.message
   }
 

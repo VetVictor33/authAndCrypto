@@ -1,24 +1,22 @@
 import { NewMonster } from "../../@types/monster";
 import { AppDataSource } from "../../data-source";
 import Monster from "../../entities/Monster";
-import User from "../../entities/User";
 import NotFoundError from "../../errors/NotFoundError";
 import { monsterNotFound } from "../../utils/MessageUtils";
 
 export default abstract class MonsterRepository {
     private static monsterRepository = AppDataSource.getRepository(Monster)
-    private static userRepository = AppDataSource.getRepository(User)
 
     static async get(userId: number, monsterId: number): Promise<Monster[] | Monster | null> {
         if (monsterId) {
-            return await this.monsterRepository.findOneBy({ id: monsterId })
+            return await this.monsterRepository.findOneBy({ id: monsterId, user_id: userId })
         }
         return await this.monsterRepository.find({ where: { user_id: userId } })
     }
 
     static async insert(userId: number, newMonster: NewMonster) {
-        const { name, skills, image_url, nickname } = newMonster;
-        const createdMonster = this.monsterRepository.create({ image_url, name, nickname, skills, user_id: userId })
+        newMonster.user_id = userId
+        const createdMonster = this.monsterRepository.create(newMonster)
         await this.monsterRepository.save(createdMonster)
         return createdMonster
     }

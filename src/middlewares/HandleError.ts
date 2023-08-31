@@ -1,10 +1,18 @@
 import { NextFunction, Request, Response } from "express";
-import { internalServerError } from "../utils/MessageUtils";
-import NotFoundError from "../errors/NotFoundError";
+import ExpressError from "../errors/ExpressError";
+import { emailNotAccepted, internalServerError } from "../utils/MessageUtils";
 
-export default async function HandleError(err: Error & Partial<NotFoundError>, req: Request, res: Response, next: NextFunction) {
-  const status = err.status ?? 500
-  const message = err.status ? err.message : internalServerError
+export default async function HandleError(err: Error & Partial<ExpressError> & Partial<any>, req: Request, res: Response, next: NextFunction) {
+  let status = err.status ?? 500
+  let message = err.status ? err.message : internalServerError
+  if (err?.code == 23505) {
+    status = 400
+    message = emailNotAccepted
+  } else if (err.name === 'ValidationError') {
+    status = 400
+    message = err.message
+  }
 
+  console.log(err)
   return res.status(status).json({ message })
 }

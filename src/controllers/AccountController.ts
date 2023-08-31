@@ -5,31 +5,13 @@ import BadRequestError from "../errors/BadRequestError";
 
 export default class AccountController {
     async signup(req: Request, res: Response) {
-        const { name, email, password } = req.body;
-        try {
-            await AccountRepository.signup(name, email, password);
-            return res.status(201).json({
-                message: successfullyAddUser
-            })
-        } catch (error: any) {
-            console.log(error)
-            if (error?.code == 23505) {
-                return res.status(400).json({
-                    message: emailNotAccepted
-                })
-            }
-            return res.status(500).json({
-                message: internalServerError
-            })
-        }
+        await AccountRepository.signup(req.body);
+        return res.status(201).json({ message: successfullyAddUser })
     }
 
-    async signin(req: Request, res: Response) {
-        const { email, password } = req.body;
-
-        const login = await AccountRepository.signin(email, password);
+    async signIn(req: Request, res: Response) {
+        const login = await AccountRepository.signIn(req.body);
         if (!login) throw new BadRequestError(failedToLogIn)
-
         return res.json(login)
     }
 }

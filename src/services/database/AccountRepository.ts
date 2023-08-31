@@ -4,19 +4,23 @@ import UnauthorizedError from "../../errors/UnauthorizedError";
 import { failedToLogIn } from "../../utils/MessageUtils";
 import TokenUtils from "../../utils/TokenUtils";
 import Encryption from "../cryptography/Encryption";
-import db from "./connection";
+
+type LoginCredential = Omit<User, 'id'>
+type SignInCredential = Omit<User, 'id' | 'name'>
 
 export default abstract class AccountRepository {
     private static userRepository = AppDataSource.getRepository(User)
 
-    static async signup(name: string, email: string, password: string) {
+    static async signup(credentials: LoginCredential) {
+        const { name, email, password } = credentials
         const hashedPassword = await Encryption.encrypt(password);
         const newUser = this.userRepository.create({ name, email, password: hashedPassword })
         await this.userRepository.save(newUser)
         return newUser
     }
 
-    static async signin(email: string, password: string) {
+    static async signIn(credentials: SignInCredential) {
+        const { email, password } = credentials
         const userFromDb = await this.userRepository.findOneBy({ email })
         if (!userFromDb) throw new UnauthorizedError(failedToLogIn)
 

@@ -13,7 +13,7 @@ export default abstract class AccountRepository {
 
     static async signup(credentials: LoginCredential) {
         const { name, email, password } = credentials
-        const hashedPassword = await Encryption.encrypt(password);
+        const hashedPassword = await Encryption.hash(password);
         const newUser = this.userRepository.create({ name, email, password: hashedPassword })
         await this.userRepository.save(newUser)
         return newUser
@@ -28,7 +28,7 @@ export default abstract class AccountRepository {
 
         await Encryption.check(password, hash);
 
-        const token = TokenUtils.getToken(+user.id);
+        const token = TokenUtils.getToken(user.id);
 
         return { token, user }
     }

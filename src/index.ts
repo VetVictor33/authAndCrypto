@@ -1,17 +1,24 @@
-import "express-async-errors"
 import "dotenv/config";
 import express from 'express';
-import Routes from "./routes";
+import "express-async-errors";
 import HandleError from "./middlewares/HandleError";
+import Routes from "./routes";
+import { AppDataSource } from "./data-source";
 
-const app = express();
+AppDataSource.initialize().then(() => {
 
-app.use(express.json());
-app.use(Routes.routes());
-app.use(HandleError)
+    const app = express()
 
-const port = process.env.PORT || 3000
+    app.use(express.json())
+    app.use(Routes.routes())
+    app.use(HandleError)
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`)
-});
+    const port = process.env.PORT || 3000
+
+    return app.listen(port, () => {
+        console.log(`Server running on port ${port}`)
+    });
+
+}).catch((error) => {
+    console.log(error)
+})

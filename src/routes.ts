@@ -18,7 +18,7 @@ export default abstract class Routes {
     this.router.get('/', (req, res) => { res.json('Server is up and running') });
 
     this.router.post('/signup', schemaValidation(accountSignupSchema), this.accountController.signup);
-    this.router.post('/signin', schemaValidation(accountLoginSchema), this.accountController.sigin);
+    this.router.post('/signin', schemaValidation(accountLoginSchema), this.accountController.signin);
 
     this.router.use(this.tokenValidation.validate);
 

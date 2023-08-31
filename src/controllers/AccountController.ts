@@ -24,7 +24,7 @@ export default class AccountController {
         }
     }
 
-    async sigin(req: Request, res: Response) {
+    async signin(req: Request, res: Response) {
         const { email, password } = req.body;
 
         const login = await AccountRepository.signin(email, password);

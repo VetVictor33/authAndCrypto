@@ -1,5 +1,7 @@
 import bcrypt from 'bcrypt';
-export default abstract class Encryptation {
+import UnauthorizedError from '../../errors/UnauthorizedError';
+import { failedToLogIn } from '../../utils/MessageUtils';
+export default abstract class Encryption {
     private static saltRounds = 10;
 
     static async encrypt(password: string): Promise<string> {
@@ -7,8 +9,8 @@ export default abstract class Encryptation {
         return encryptedPassword
     }
 
-    static async check(password: string, hash: string): Promise<boolean> {
+    static async check(password: string, hash: string): Promise<void> {
         const response = await bcrypt.compare(password, hash);
-        return response
+        if (!response) throw new UnauthorizedError(failedToLogIn)
     }
 }

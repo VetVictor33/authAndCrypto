@@ -1,10 +1,9 @@
-import { DetailedMonster, Monster as TMonster, NewMonster } from "../../@types/monster";
+import { NewMonster } from "../../@types/monster";
 import { AppDataSource } from "../../data-source";
 import Monster from "../../entities/Monster";
 import User from "../../entities/User";
 import NotFoundError from "../../errors/NotFoundError";
 import { monsterNotFound } from "../../utils/MessageUtils";
-import db from "./connection";
 
 export default abstract class MonsterRepository {
     private static monsterRepository = AppDataSource.getRepository(Monster)

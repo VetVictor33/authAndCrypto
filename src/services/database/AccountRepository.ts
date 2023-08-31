@@ -32,4 +32,8 @@ export default abstract class AccountRepository {
 
         return { token, user }
     }
+
+    static async getUser(userId: number): Promise<User> {
+        return await this.userRepository.findOneByOrFail({ id: userId })
+    }
 }

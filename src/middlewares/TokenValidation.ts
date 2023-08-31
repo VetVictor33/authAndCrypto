@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import jwt, { JsonWebTokenError, ModJwtPayload } from 'jsonwebtoken';
-import db from "../services/database/connection";
-import TokenUtils from "../utils/TokenUtils";
+import { JsonWebTokenError, ModJwtPayload } from 'jsonwebtoken';
 import { internalServerError } from "../utils/MessageUtils";
+import TokenUtils from "../utils/TokenUtils";
+import AccountRepository from "../services/database/AccountRepository";
 
 export default class TokenValidation {
     async validate(req: Request, res: Response, next: NextFunction) {
@@ -13,7 +13,7 @@ export default class TokenValidation {
             const userToken = TokenUtils.validateToken(token);
             const { id } = userToken as ModJwtPayload;
 
-            const userFromDb = await db("users").where({ id }).first();
+            const userFromDb = await AccountRepository.getUser(id)
             const { password: _, ...user } = userFromDb;
             req.user = user;
             next()

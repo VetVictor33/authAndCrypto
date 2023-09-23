@@ -1,0 +1,29 @@
+# services:
+#   postgres:
+#     image: postgres
+#     environment:
+#       - POSTGRESQL_USERNAME=docker
+#       - POSTGRESQL_PASSWORD=docker
+#     ports:
+#       - 5432:5432
+
+services:
+  db:
+    container_name: postgres_container
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: mastersandmonsters
+    ports:
+      - "5432:5432"
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: adm
+    ports:
+      - "5050:80"
